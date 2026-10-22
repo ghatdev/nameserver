@@ -11,6 +11,8 @@ cargo build --workspace --locked
 
 PostgreSQL migrations create separate `nameserver_admin` and application roles. For an external installation, configure credentials and authentication through your database administrator. The sample infrastructure is for local development. Keep the unauthenticated management API and NATS private, or put them behind authenticated access.
 
+The examples reserve 256 MiB for the JetStream flow stream through `nats.flow_max_bytes` (under `management.nats` on DNS nodes). Without that setting, the default is 10 GiB; the broker must have enough available storage to reserve it. Use the same value across nodes. Provisioning preserves an existing stream's limits, so change an existing stream through NATS administration when adjusting its capacity.
+
 Start these in separate terminals:
 
 ```sh

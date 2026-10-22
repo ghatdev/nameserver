@@ -8,6 +8,7 @@ listen = "127.0.0.1:8080"
 [nats]
 url = "nats://127.0.0.1:24222"
 stream_replicas = 1
+flow_max_bytes = 268435456 # 256 MiB for local development
 
 [clickhouse]
 url = "http://127.0.0.1:28123"

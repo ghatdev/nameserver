@@ -43,6 +43,7 @@ auto_rdap = false
 listen = "127.0.0.1:{cls.api_port}"
 [nats]
 url = "{nats}"
+flow_max_bytes = 268435456
 [clickhouse]
 url = "{ch}"
 database = "nameserver"
@@ -52,6 +53,7 @@ database = "nameserver"
 listen = ["127.0.0.1:{cls.authority_port}"]
 [management.nats]
 url = "{nats}"
+flow_max_bytes = 268435456
 ''')
         cls.launch("nameserver-control", control, cls.api_port)
         cls.launch("nameserver-authority", authority, cls.authority_port)
@@ -123,6 +125,7 @@ trust_anchor = "trusted.key"
 default_profile = "{cls.profile}"
 [management.nats]
 url = "{nats}"
+flow_max_bytes = 268435456
 ''')
         cls.launch("nameserver-resolver", resolver, cls.resolver_port)
         # Durable consumers may retry after starting before the resolver provisions its stream.

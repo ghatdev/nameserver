@@ -7,6 +7,9 @@ pub struct NatsConfig {
     pub url: String,
     #[serde(default = "default_stream_replicas")]
     pub stream_replicas: usize,
+    /// Storage reservation for a newly created flow stream, in bytes.
+    #[serde(default = "default_flow_max_bytes")]
+    pub flow_max_bytes: i64,
 }
 
 impl Default for NatsConfig {
@@ -14,6 +17,7 @@ impl Default for NatsConfig {
         Self {
             url: default_nats_url(),
             stream_replicas: default_stream_replicas(),
+            flow_max_bytes: default_flow_max_bytes(),
         }
     }
 }
@@ -24,4 +28,8 @@ fn default_nats_url() -> String {
 
 fn default_stream_replicas() -> usize {
     1
+}
+
+fn default_flow_max_bytes() -> i64 {
+    crate::nats_subjects::FLOWS_MAX_BYTES
 }

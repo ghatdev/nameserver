@@ -12,3 +12,4 @@ node_name = "local"
 
 [management.nats]
 url = "nats://127.0.0.1:24222"
+flow_max_bytes = 268435456 # 256 MiB for local development

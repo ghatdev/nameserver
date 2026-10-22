@@ -4,12 +4,16 @@ use std::time::Duration;
 
 /// Idempotently create JetStream streams, Object Store buckets, and KV store.
 pub async fn provision(js: &jetstream::Context, config: &NatsConfig) -> anyhow::Result<()> {
+    anyhow::ensure!(
+        config.flow_max_bytes > 0,
+        "nats.flow_max_bytes must be positive"
+    );
     // Flow stream.
     js.get_or_create_stream(jetstream::stream::Config {
         name: STREAM_FLOWS.to_string(),
         subjects: vec![SUBJECT_FLOW.to_string()],
         max_age: Duration::from_secs(FLOWS_MAX_AGE_SECS),
-        max_bytes: FLOWS_MAX_BYTES,
+        max_bytes: config.flow_max_bytes,
         num_replicas: config.stream_replicas,
         ..Default::default()
     })
