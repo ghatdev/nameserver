@@ -1,0 +1,21 @@
+[package]
+name = "nameserver-authority"
+description = "Standalone authoritative DNS server with zone files and DNSSEC signing"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+hickory-server.workspace = true
+nameserver-core.workspace = true
+rustls.workspace = true
+rustls-pemfile.workspace = true
+serde.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+tempfile = "3"

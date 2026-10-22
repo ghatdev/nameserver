@@ -1,0 +1,2 @@
+# Allowlist entries override blocklist entries, including for subdomains.
+safe.blocked.example.test

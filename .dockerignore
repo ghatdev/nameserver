@@ -1,0 +1,11 @@
+.git
+target
+dist
+config
+*.pem
+*.key
+*.der
+*.age
+.env*
+.DS_Store
+__pycache__

@@ -1,0 +1,22 @@
+$ORIGIN example.test.
+$TTL 300
+@ IN SOA ns1.example.test. hostmaster.example.test. (
+    2026102201 ; serial: increase after editing
+    3600       ; refresh
+    600        ; retry
+    1209600    ; expire
+    300        ; negative cache TTL
+)
+@     IN NS    ns1.example.test.
+@     IN NS    ns2.example.test.
+@     IN A     192.0.2.10
+@     IN AAAA  2001:db8::10
+@     IN MX    10 mail.example.test.
+@     IN TXT   "v=spf1 -all"
+ns1   IN A     192.0.2.53
+ns2   IN A     198.51.100.53
+www   IN CNAME example.test.
+mail  IN A     192.0.2.25
+safe.blocked IN A 192.0.2.20
+blocked IN A 192.0.2.30
+*.wild IN A 192.0.2.40

@@ -1,0 +1,2 @@
+# Entries block the domain and its subdomains. Documentation-only test names.
+blocked.example.test

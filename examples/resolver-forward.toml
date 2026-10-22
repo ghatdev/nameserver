@@ -1,0 +1,12 @@
+[server]
+listen = ["127.0.0.1:5353"]
+allow_networks = ["127.0.0.0/8", "::1/128"]
+
+[resolver]
+mode = "forward"
+upstreams = ["9.9.9.9:53", "1.1.1.1:53"]
+dnssec_validation = true
+
+[filters]
+blocklists = ["lists/blocked.txt"]
+allowlists = ["lists/allowed.txt"]

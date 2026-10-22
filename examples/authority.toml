@@ -1,0 +1,7 @@
+[server]
+listen = ["127.0.0.1:5354"]
+allow_networks = ["0.0.0.0/0", "::/0"]
+
+[[zones]]
+origin = "example.test"
+file = "zones/example.test.zone"
