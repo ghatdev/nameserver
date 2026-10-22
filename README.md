@@ -75,7 +75,7 @@ The examples permit loopback clients. To serve your devices, set the listening a
 
 List files accept one domain per line or hosts-file entries, with `#` comments. A domain entry applies to that name and its subdomains. Allowlist matches override blocklist matches. Blocked queries return `NXDOMAIN` with a 60-second negative-cache TTL and the AD flag cleared.
 
-Lists apply to the original query name. Inspection of CNAME targets, response IP filtering, and machine learning are outside the current feature set.
+Local file lists apply to the original query name. Managed profiles also support response IP allow/block filters. Domain lists do not inspect CNAME targets. Optional ML inference runs in the control plane, as described in [managed setup](docs/management.md).
 
 On Unix, send `SIGHUP` to reload configuration, zone files, lists, DNSSEC keys, and TLS certificates. A failed replacement keeps the current snapshot. Listener addresses, client access rules, and request limits require a restart. Resolver reloads clear its caches.
 
