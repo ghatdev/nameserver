@@ -1,0 +1,27 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT infra_fingerprint as \"infra_fingerprint?: pgvector::Vector\" FROM domain_reputation WHERE registrable_domain = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "infra_fingerprint?: pgvector::Vector",
+        "type_info": {
+          "Custom": {
+            "name": "vector",
+            "kind": "Simple"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      true
+    ]
+  },
+  "hash": "4f904bdcee7a667b7b99e806d70eedb5ae4d0f6ddc170c6a6e66f9fe742ceb60"
+}

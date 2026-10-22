@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO domain_reputation (\n            registrable_domain, total_flow_count, first_seen, last_seen,\n            tld, tld_type, ns_trust, ns_observation_count,\n            infra_fingerprint,\n            avg_auth_ttl, min_auth_ttl, avg_resolve_ms, avg_chain_depth,\n            has_cname, cname_targets,\n            has_dnssec, has_mx,\n            unique_ip_count, a_record_count,\n            last_ns_change_at,\n            updated_at\n        ) VALUES (\n            $1, 1, $2, $2,\n            $3, $4, $5, 1,\n            $6,\n            $7, $7, $8, $9,\n            $10, $11,\n            $12, $13,\n            $14, $15,\n            NULL,\n            $2\n        )\n        ON CONFLICT (registrable_domain) DO UPDATE SET\n            total_flow_count = domain_reputation.total_flow_count + 1,\n            last_seen = GREATEST(domain_reputation.last_seen, $2),\n            ns_trust = CASE\n                -- NS changed (provider-level) \u2192 reset trust to fresh classification\n                WHEN $16 THEN $5\n                -- Stable: NS unchanged for 30+ days AND (50 flows OR 30d + 10 flows)\n                WHEN (domain_reputation.last_ns_change_at IS NULL\n                      OR EXTRACT(EPOCH FROM ($2 - domain_reputation.last_ns_change_at)) / 86400 >= 30)\n                     AND (domain_reputation.ns_observation_count >= 50\n                          OR (EXTRACT(EPOCH FROM ($2 - domain_reputation.first_seen)) / 86400 >= 30\n                              AND domain_reputation.ns_observation_count >= 10))\n                THEN 'stable'\n                ELSE COALESCE(domain_reputation.ns_trust, $5)\n            END,\n            last_ns_change_at = CASE\n                WHEN $16 THEN $2\n                ELSE domain_reputation.last_ns_change_at\n            END,\n            ns_observation_count = domain_reputation.ns_observation_count + 1,\n            infra_fingerprint = $6,\n            avg_auth_ttl = 0.9 * COALESCE(domain_reputation.avg_auth_ttl, $7) + 0.1 * $7,\n            min_auth_ttl = LEAST(COALESCE(domain_reputation.min_auth_ttl, $7), $7),\n            avg_resolve_ms = 0.9 * COALESCE(domain_reputation.avg_resolve_ms, $8) + 0.1 * $8,\n            avg_chain_depth = 0.9 * COALESCE(domain_reputation.avg_chain_depth, $9) + 0.1 * $9,\n            has_cname = domain_reputation.has_cname OR $10,\n            cname_targets = (\n                SELECT COALESCE(jsonb_agg(e.elem), '[]'::jsonb)\n                FROM (\n                    SELECT DISTINCT elem\n                    FROM jsonb_array_elements_text(domain_reputation.cname_targets || $11) AS elem\n                    LIMIT 50\n                ) e\n            ),\n            has_dnssec = domain_reputation.has_dnssec OR $12,\n            has_mx = domain_reputation.has_mx OR $13,\n            unique_ip_count = GREATEST(domain_reputation.unique_ip_count, $14),\n            a_record_count = GREATEST(domain_reputation.a_record_count, $15),\n            updated_at = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Timestamptz",
+        "Text",
+        "Text",
+        "Text",
+        {
+          "Custom": {
+            "name": "vector",
+            "kind": "Simple"
+          }
+        },
+        "Float4",
+        "Float4",
+        "Float4",
+        "Bool",
+        "Jsonb",
+        "Bool",
+        "Bool",
+        "Int2",
+        "Int2",
+        "Bool"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "964ea4f47aa62e8d9f4e57339e5bb9701fda9aa8ac19348980c4fb145bd28ec5"
+}

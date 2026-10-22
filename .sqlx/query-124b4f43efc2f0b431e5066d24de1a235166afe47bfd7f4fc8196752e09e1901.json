@@ -1,0 +1,26 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO enrichment_bindings (source_id, enrichment_type)\n             VALUES ($1, $2)\n             ON CONFLICT DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        {
+          "Custom": {
+            "name": "enrichment_type",
+            "kind": {
+              "Enum": [
+                "nrd",
+                "well_known",
+                "bulletproof"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "124b4f43efc2f0b431e5066d24de1a235166afe47bfd7f4fc8196752e09e1901"
+}

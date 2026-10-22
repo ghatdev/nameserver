@@ -1,0 +1,58 @@
+[package]
+name = "nameserver-control"
+description = "Management API, configuration distribution, flow analytics, and optional threat detection"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "nameserver-control"
+path = "src/main.rs"
+
+[dependencies]
+nameserver-common = { workspace = true, features = ["postgres", "nats"] }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+async-nats = { workspace = true }
+clickhouse = { workspace = true }
+sqlx = { workspace = true }
+axum = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+toml = { workspace = true }
+anyhow = { workspace = true }
+hickory-proto = { workspace = true }
+rustls = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+fst = { workspace = true }
+arc-swap = { workspace = true }
+xorf = { workspace = true }
+bincode = { workspace = true }
+clap = { workspace = true }
+uuid = { workspace = true }
+rmp-serde = { workspace = true }
+ipnetwork = "0.20"
+flate2 = "1"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+rand = "0.8"
+ort = { version = "=2.0.0-rc.12", default-features = false, features = ["std", "ndarray", "tracing", "load-dynamic", "api-24"], optional = true }
+pgvector = { version = "0.4", features = ["sqlx"] }
+time = { workspace = true }
+futures = { workspace = true }
+rustls-pemfile = { workspace = true }
+x509-parser = "0.16"
+cms = { version = "0.2", features = ["builder"] }
+const-oid = { version = "0.9", features = ["db"] }
+x509-cert = "0.2"
+p256 = { version = "0.13", features = ["ecdsa", "pkcs8", "pem"] }
+ecdsa = { version = "0.16", features = ["signing", "pem", "der"] }
+rsa = { version = "0.9", features = ["sha2"] }
+
+[features]
+default = []
+ml = ["ort"]

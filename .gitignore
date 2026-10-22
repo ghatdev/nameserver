@@ -10,3 +10,10 @@
 .DS_Store
 __pycache__/
 *.pyc
+
+/data/
+/ml/data/
+/ml/.venv/
+/ml/models/**/*.parquet
+/ml/models/**/*.csv
+/ml/models/**/*.pt

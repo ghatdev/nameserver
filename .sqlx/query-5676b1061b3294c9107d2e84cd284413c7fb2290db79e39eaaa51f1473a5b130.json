@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM geo_entries WHERE rir = 'iptoasn' AND ip_version = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int2"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "5676b1061b3294c9107d2e84cd284413c7fb2290db79e39eaaa51f1473a5b130"
+}

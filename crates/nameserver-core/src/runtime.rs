@@ -7,10 +7,11 @@ use tokio::net::{TcpListener, UdpSocket};
 use tracing::{info, warn};
 use tracing_subscriber::EnvFilter;
 
-use crate::{Args, Handler, ServerSettings, Snapshot, doh, tls};
+use crate::{Args, Handler, ServerSettings, Snapshot, doh, dot, tls};
 
 pub struct Prepared {
     pub server: ServerSettings,
+    pub certificate: Option<Arc<dyn rustls::server::ResolvesServerCert>>,
     pub snapshot: Snapshot,
     /// Rebuild signed authoritative data before its signatures expire.
     pub refresh_after: Option<Duration>,
@@ -34,10 +35,12 @@ where
     let path = std::fs::canonicalize(&args.config).context("configuration file does not exist")?;
     let prepared = build(path.clone()).await?;
     prepared.server.validate()?;
+    let override_certificate = prepared.certificate.clone();
     let certificate = prepared
         .server
         .tls
         .as_ref()
+        .filter(|_| override_certificate.is_none())
         .map(|settings| tls::load(settings, &path))
         .transpose()?;
     if args.check {
@@ -50,7 +53,7 @@ where
     let handler = Handler::new(prepared.snapshot, settings.clone());
     let snapshots = handler.snapshot.clone();
     let mut server = Server::new(handler.clone());
-    let native_active = !settings.listen.is_empty() || !settings.listen_dot.is_empty();
+    let native_active = !settings.listen.is_empty();
     let timeout = Duration::from_secs(settings.tcp_idle_timeout_secs);
     // Bind every socket before registering any listener, so startup is all-or-nothing.
     let mut plain = Vec::new();
@@ -80,17 +83,31 @@ where
                 .context("cannot bind DoH listener")?,
         );
     }
-    let certificate =
-        certificate.map(|key| Arc::new(tls::CertificateResolver(ArcSwap::from_pointee(key))));
+    let file_certificate = certificate.map(|key| {
+        Arc::new(tls::CertificateResolver(ArcSwap::from_pointee(key)))
+            as Arc<dyn rustls::server::ResolvesServerCert>
+    });
+    let certificate = override_certificate
+        .or(file_certificate)
+        .map(|provider| Arc::new(tls::CertificateSource::new(provider)));
     for (udp, tcp) in plain {
         server.register_socket(udp);
         server.register_listener(tcp, timeout, 16);
     }
     let mut doh_handles = Vec::new();
     let mut doh_jobs = tokio::task::JoinSet::new();
+    let (dot_shutdown, dot_receiver) = tokio::sync::watch::channel(false);
     if let Some(resolver) = &certificate {
         for listener in dot {
-            server.register_tls_listener(listener, timeout, resolver.clone())?;
+            let job = dot::start(
+                listener,
+                resolver.clone(),
+                handler.clone(),
+                settings.tls.as_ref().and_then(|tls| tls.dns_name.clone()),
+                timeout,
+                dot_receiver.clone(),
+            )?;
+            doh_jobs.spawn(job);
         }
         for listener in doh {
             let (handle, job) = doh::start(
@@ -135,6 +152,7 @@ where
             result = &mut shutdown => {
                 result?;
                 info!("shutdown requested; draining DNS service");
+                let _ = dot_shutdown.send(true);
                 for handle in &doh_handles { handle.graceful_shutdown(Some(Duration::from_secs(10))); }
                 let drain = async {
                     server.shutdown_gracefully().await?;
@@ -162,6 +180,7 @@ where
                 .server
                 .tls
                 .as_ref()
+                .filter(|_| next.certificate.is_none())
                 .map(|tls| tls::load(tls, &path))
                 .transpose()?;
             Ok::<_, anyhow::Error>((next, key))
@@ -169,8 +188,14 @@ where
         .await;
         match replacement {
             Ok((next, key)) => {
-                if let (Some(resolver), Some(key)) = (&certificate, key) {
-                    resolver.0.store(Arc::new(key));
+                let provider = next.certificate.clone().or_else(|| {
+                    key.map(|key| {
+                        Arc::new(tls::CertificateResolver(ArcSwap::from_pointee(key)))
+                            as Arc<dyn rustls::server::ResolvesServerCert>
+                    })
+                });
+                if let (Some(resolver), Some(provider)) = (&certificate, provider) {
+                    resolver.swap(provider);
                 }
                 snapshots.store(Arc::new(next.snapshot));
                 refresh_after = next.refresh_after;

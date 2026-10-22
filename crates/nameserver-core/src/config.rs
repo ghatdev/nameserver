@@ -39,7 +39,9 @@ pub struct ServerSettings {
 #[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
 pub struct TlsSettings {
+    #[serde(default = "default_certificate")]
     pub certificate: PathBuf,
+    #[serde(default = "default_private_key")]
     pub private_key: PathBuf,
     /// Optional expected HTTP authority for DoH; omit when serving several hostnames.
     pub dns_name: Option<String>,
@@ -124,6 +126,13 @@ pub fn relative_to(config: &Path, file: &Path) -> PathBuf {
     } else {
         config.parent().unwrap_or_else(|| Path::new(".")).join(file)
     }
+}
+
+fn default_certificate() -> PathBuf {
+    PathBuf::from("cert.pem")
+}
+fn default_private_key() -> PathBuf {
+    PathBuf::from("key.pem")
 }
 
 #[cfg(test)]

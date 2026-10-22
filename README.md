@@ -1,13 +1,17 @@
 # nameserver
 
-Two standalone DNS services in one Rust workspace:
+Four core components in one Rust workspace:
 
 | Binary | Purpose |
 | --- | --- |
 | `nameserver-resolver` | Personal recursive or forwarding DNS with caching, DNSSEC validation, domain filtering, UDP/TCP, DoH, and DoT |
-| `nameserver-authority` | Authoritative DNS for your domains, with standard zone files, multiple zones, UDP/TCP, and optional DNSSEC signing |
+| `nameserver-authority` | Authoritative DNS for your domains, using local zone files or managed zones, with optional DNSSEC signing |
+| `nameserver-control` | Management API, profiles, feeds, compiled filters, zone distribution, flow analytics, reputation, and optional research/ML workers |
+| `nameserver` | CLI controller and DNS diagnostics |
 
-Each binary starts from local files. Neither requires a database, message broker, control service, or the other binary. DNS protocol handling and validation use [Hickory DNS](https://github.com/hickory-dns/hickory-dns).
+The two DNS servers can start independently from local files. Managed deployments use the CLI, control plane, PostgreSQL, ClickHouse, and NATS together. DNS protocol handling and validation use [Hickory DNS](https://github.com/hickory-dns/hickory-dns).
+
+See [architecture](docs/architecture.md) for the component boundaries and [managed setup](docs/management.md) for the full stack. The CLI and control plane are core components; independent DNS startup is an operating mode.
 
 ## Build
 
@@ -105,7 +109,7 @@ python3 tests/integration.py
 
 Integration tests require Python 3, OpenSSL, and curl with HTTP/2 support. They start both binaries on temporary loopback ports, create temporary keys, and exercise real UDP, TCP, DoT, DoH, filtering, client restrictions, DNSSEC validation, authenticated denial, and reload behavior. They do not query external DNS. Set `NAMESERVER_BIN_DIR` to test an alternate binary directory.
 
-CI runs on Linux and macOS. Pushing a `v*` tag builds archives containing both binaries, examples, root hints, and documentation, then publishes a GitHub release.
+CI runs on Linux and macOS. Pushing a `v*` tag builds archives containing all four binaries, examples, root hints, and documentation, then publishes a GitHub release.
 
 In an extracted release archive, run `bin/nameserver-authority --config examples/authority.toml` or `bin/nameserver-resolver --config examples/resolver.toml` from the archive directory.
 
@@ -114,10 +118,24 @@ In an extracted release archive, run `bin/nameserver-authority --config examples
 ```text
 crates/nameserver-core/       shared configuration, policy, TLS, and service runtime
 crates/nameserver-resolver/   recursive/forwarding resolver
-crates/nameserver-authority/  file-backed authoritative server and zone signing
+crates/nameserver-authority/  local/managed authoritative zones and signing
+crates/nameserver-control/    management API, ingestion, enrichment, optional ML
+crates/nameserver-cli/        CLI controller and diagnostic commands
+crates/nameserver-common/     protocol types, filters, artifact formats
+atlas/                       schema and versioned migrations
+ml/                          optional research tooling and inference artifacts
+tools/                       migration and model-bundle utilities
 examples/                    working configurations, lists, and a test zone
 resources/                   public root hints
 tests/                       local protocol integration tests
 ```
 
 Licensed under [MIT](LICENSE).
+
+The managed integration suite runs against the isolated Compose services after applying their migrations:
+
+```sh
+python3 tests/management.py
+```
+
+It covers CLI zone/profile updates, DoH/DoT profile routing, DNSSEC signing and validation, policy reloads, last-good zone retention, and PostgreSQL/ClickHouse flow ingestion. Automatic research workers and ML inference are disabled in the default build and sample config.

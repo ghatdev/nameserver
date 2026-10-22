@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE filters SET\n            display_name = COALESCE($2, display_name),\n            source_id = COALESCE($3, source_id),\n            updated_at = now()\n         WHERE slug = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "f4d6a11932aa6dacd0fa68f5870284a41391847437d9130fa05dc81b03405e5b"
+}

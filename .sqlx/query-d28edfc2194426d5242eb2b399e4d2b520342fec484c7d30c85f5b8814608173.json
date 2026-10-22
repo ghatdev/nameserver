@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO sources (slug, url, indicator_type, categories, fetch_config, parse_config, validate_config, refresh_interval_secs)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)\n         ON CONFLICT (slug) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        {
+          "Custom": {
+            "name": "indicator_type",
+            "kind": {
+              "Enum": [
+                "domain",
+                "ip",
+                "asn",
+                "geo",
+                "suffix"
+              ]
+            }
+          }
+        },
+        "TextArray",
+        "Jsonb",
+        "Jsonb",
+        "Jsonb",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "d28edfc2194426d5242eb2b399e4d2b520342fec484c7d30c85f5b8814608173"
+}

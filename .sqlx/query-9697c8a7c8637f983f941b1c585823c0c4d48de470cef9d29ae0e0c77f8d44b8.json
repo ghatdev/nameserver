@@ -1,0 +1,26 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT f.slug, s.last_checksum\n         FROM filters f\n         JOIN sources s ON f.source_id = s.id\n         WHERE s.last_checksum IS NOT NULL",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "slug",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "last_checksum",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      true
+    ]
+  },
+  "hash": "9697c8a7c8637f983f941b1c585823c0c4d48de470cef9d29ae0e0c77f8d44b8"
+}

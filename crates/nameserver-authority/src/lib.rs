@@ -1,3 +1,6 @@
+mod managed;
+mod managed_zone;
+
 use std::{
     collections::HashSet,
     fs::File,
@@ -25,7 +28,9 @@ use serde::Deserialize;
 struct Config {
     #[serde(default = "default_server")]
     server: ServerSettings,
+    #[serde(default)]
     zones: Vec<ZoneSettings>,
+    management: Option<managed::Settings>,
 }
 
 #[derive(Deserialize)]
@@ -60,10 +65,11 @@ pub async fn build(path: PathBuf) -> Result<Prepared> {
     let config: Config = read_config(&path)?;
     config.server.validate()?;
     ensure!(
-        !config.zones.is_empty(),
+        !config.zones.is_empty() || config.management.is_some(),
         "at least one authoritative zone is required"
     );
     let mut catalog = Catalog::new();
+    let mut file_handlers = std::collections::BTreeMap::new();
     let mut seen = HashSet::new();
     let mut refresh_after: Option<Duration> = None;
     for zone in config.zones {
@@ -99,12 +105,24 @@ pub async fn build(path: PathBuf) -> Result<Prepared> {
             );
             refresh_after = Some(refresh_after.map_or(interval, |current| current.min(interval)));
         }
-        catalog.upsert(origin.into(), vec![Arc::new(handler)]);
+        let handler = Arc::new(handler);
+        file_handlers.insert(
+            origin.to_ascii(),
+            handler.clone() as Arc<dyn hickory_server::zone_handler::ZoneHandler>,
+        );
+        catalog.upsert(origin.into(), vec![handler]);
     }
+    let (catalog, background) = match config.management {
+        Some(settings) => managed::connect(settings, file_handlers).await?,
+        None => (Arc::new(arc_swap::ArcSwap::from_pointee(catalog)), vec![]),
+    };
     Ok(Prepared {
         server: config.server,
+        certificate: None,
         snapshot: Snapshot {
             catalog,
+            background,
+            processor: None,
             unchecked_catalog: None,
             filter: Filter::default(),
             recursive: false,

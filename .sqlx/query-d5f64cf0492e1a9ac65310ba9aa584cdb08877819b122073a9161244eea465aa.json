@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM indicator_domains WHERE source = $1 AND domain <> ALL($2)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "TextArray"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "d5f64cf0492e1a9ac65310ba9aa584cdb08877819b122073a9161244eea465aa"
+}

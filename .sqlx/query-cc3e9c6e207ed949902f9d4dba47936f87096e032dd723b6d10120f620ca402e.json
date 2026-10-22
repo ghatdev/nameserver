@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO domain_ns_map (registrable_domain, ns_domain, first_seen, last_seen, observation_count)\n             VALUES ($1, $2, $3, $3, 1)\n             ON CONFLICT(registrable_domain, ns_domain) DO UPDATE SET\n               last_seen = GREATEST(domain_ns_map.last_seen, $3),\n               observation_count = domain_ns_map.observation_count + 1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "cc3e9c6e207ed949902f9d4dba47936f87096e032dd723b6d10120f620ca402e"
+}

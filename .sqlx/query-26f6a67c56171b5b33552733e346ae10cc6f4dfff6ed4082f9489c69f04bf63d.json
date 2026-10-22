@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO ips (ip, first_seen, last_seen, domain_count, updated_at)\n             VALUES ($1, $2, $2, 1, $2)\n             ON CONFLICT(ip) DO UPDATE SET\n               last_seen = GREATEST(ips.last_seen, $2),\n               domain_count = ips.domain_count + CASE WHEN $3 THEN 1 ELSE 0 END,\n               updated_at = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Inet",
+        "Timestamptz",
+        "Bool"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "26f6a67c56171b5b33552733e346ae10cc6f4dfff6ed4082f9489c69f04bf63d"
+}

@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT DISTINCT asn, asn_desc FROM geo_entries WHERE asn = ANY($1) AND asn_desc IS NOT NULL AND asn_desc != ''",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "asn",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "asn_desc",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4Array"
+      ]
+    },
+    "nullable": [
+      false,
+      true
+    ]
+  },
+  "hash": "99a625d4c82825e46c0bdb5767f1d4539032e6159462fdf80c3faa939c35231c"
+}

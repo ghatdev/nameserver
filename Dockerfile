@@ -2,6 +2,8 @@ FROM rust:1-bookworm AS build
 WORKDIR /src
 COPY Cargo.toml Cargo.lock ./
 COPY crates ./crates
+COPY .cargo ./.cargo
+COPY .sqlx ./.sqlx
 COPY examples ./examples
 RUN cargo build --release --workspace --locked
 
@@ -23,3 +25,13 @@ COPY --from=build /src/target/release/nameserver-authority /usr/local/bin/namese
 EXPOSE 5354/udp 5354/tcp
 ENTRYPOINT ["nameserver-authority"]
 CMD ["--config", "/etc/nameserver/examples/authority-container.toml"]
+
+FROM runtime AS control
+COPY --from=build /src/target/release/nameserver-control /usr/local/bin/nameserver-control
+EXPOSE 8080/tcp
+ENTRYPOINT ["nameserver-control"]
+CMD ["--config", "/etc/nameserver/examples/control.toml"]
+
+FROM runtime AS cli
+COPY --from=build /src/target/release/nameserver /usr/local/bin/nameserver
+ENTRYPOINT ["nameserver"]

@@ -1,0 +1,77 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT f.id, f.slug, f.display_name, f.source_id,\n                f.filter_type as \"filter_type: FilterType\",\n                f.output_format as \"output_format: OutputFormat\",\n                s.slug AS source_slug\n         FROM filters f\n         JOIN sources s ON f.source_id = s.id\n         ORDER BY f.slug",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "slug",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "display_name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "source_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 4,
+        "name": "filter_type: FilterType",
+        "type_info": {
+          "Custom": {
+            "name": "filter_type",
+            "kind": {
+              "Enum": [
+                "block",
+                "allow"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "output_format: OutputFormat",
+        "type_info": {
+          "Custom": {
+            "name": "output_format",
+            "kind": {
+              "Enum": [
+                "xor",
+                "fst",
+                "ipf"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "source_slug",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "c1ece25b4d1d68c34112ea9959579fd73d9517f0e8e3a33cb9845c2a2ce650ea"
+}

@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id FROM sources\n         WHERE enabled = true\n           AND url != ''\n           AND (last_pull_at IS NULL OR last_pull_at + make_interval(secs => refresh_interval_secs) <= $1)\n         ORDER BY slug",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "a81df4bde4cb8a048a87bff67ad5ac12b917ac48a2740a3f0fbeba34bfda6e3e"
+}

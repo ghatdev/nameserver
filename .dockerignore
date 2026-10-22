@@ -9,3 +9,6 @@ config
 .env*
 .DS_Store
 __pycache__
+
+ml
+data

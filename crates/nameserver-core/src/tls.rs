@@ -41,3 +41,23 @@ pub fn load(settings: &TlsSettings, config: &Path) -> Result<CertifiedKey> {
         .context("TLS certificate and private key do not match")?;
     Ok(certified)
 }
+
+/// Stable listener identity whose certificate source can change on reload.
+#[derive(Debug)]
+pub struct CertificateSource(std::sync::RwLock<Arc<dyn ResolvesServerCert>>);
+impl CertificateSource {
+    pub fn new(provider: Arc<dyn ResolvesServerCert>) -> Self {
+        Self(std::sync::RwLock::new(provider))
+    }
+    pub fn swap(&self, provider: Arc<dyn ResolvesServerCert>) {
+        *self.0.write().unwrap_or_else(|e| e.into_inner()) = provider;
+    }
+}
+impl ResolvesServerCert for CertificateSource {
+    fn resolve(&self, hello: ClientHello<'_>) -> Option<Arc<CertifiedKey>> {
+        self.0
+            .read()
+            .unwrap_or_else(|e| e.into_inner())
+            .resolve(hello)
+    }
+}

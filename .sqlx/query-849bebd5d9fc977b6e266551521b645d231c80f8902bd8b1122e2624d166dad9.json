@@ -1,0 +1,161 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT s.slug, s.url,\n                s.indicator_type as \"indicator_type: IndicatorType\",\n                s.categories, s.fetch_config, s.parse_config, s.validate_config,\n                s.refresh_interval_secs, s.enabled,\n                s.last_pull_at, s.last_checksum, s.last_entry_count,\n                f.slug AS \"filter_slug?\",\n                f.display_name AS \"filter_display_name?\",\n                f.filter_type as \"filter_type?: FilterType\",\n                f.output_format as \"output_format?: OutputFormat\",\n                eb.enrichment_type as \"enrichment_type?: EnrichmentType\"\n         FROM sources s\n         LEFT JOIN filters f ON f.source_id = s.id\n         LEFT JOIN enrichment_bindings eb ON eb.source_id = s.id\n         ORDER BY s.slug",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "slug",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "url",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "indicator_type: IndicatorType",
+        "type_info": {
+          "Custom": {
+            "name": "indicator_type",
+            "kind": {
+              "Enum": [
+                "domain",
+                "ip",
+                "asn",
+                "geo",
+                "suffix"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "categories",
+        "type_info": "TextArray"
+      },
+      {
+        "ordinal": 4,
+        "name": "fetch_config",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 5,
+        "name": "parse_config",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 6,
+        "name": "validate_config",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 7,
+        "name": "refresh_interval_secs",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 8,
+        "name": "enabled",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 9,
+        "name": "last_pull_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 10,
+        "name": "last_checksum",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 11,
+        "name": "last_entry_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 12,
+        "name": "filter_slug?",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 13,
+        "name": "filter_display_name?",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 14,
+        "name": "filter_type?: FilterType",
+        "type_info": {
+          "Custom": {
+            "name": "filter_type",
+            "kind": {
+              "Enum": [
+                "block",
+                "allow"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "output_format?: OutputFormat",
+        "type_info": {
+          "Custom": {
+            "name": "output_format",
+            "kind": {
+              "Enum": [
+                "xor",
+                "fst",
+                "ipf"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "enrichment_type?: EnrichmentType",
+        "type_info": {
+          "Custom": {
+            "name": "enrichment_type",
+            "kind": {
+              "Enum": [
+                "nrd",
+                "well_known",
+                "bulletproof"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "849bebd5d9fc977b6e266551521b645d231c80f8902bd8b1122e2624d166dad9"
+}

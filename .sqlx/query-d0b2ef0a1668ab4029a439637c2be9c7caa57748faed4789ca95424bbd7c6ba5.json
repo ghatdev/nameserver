@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO domains (domain, first_seen, last_seen, query_count, updated_at)\n         VALUES ($1, $2, $2, 1, $2)\n         ON CONFLICT(domain) DO UPDATE SET\n           last_seen = GREATEST(domains.last_seen, $2),\n           query_count = domains.query_count + 1,\n           updated_at = $2\n         RETURNING first_seen, query_count",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "first_seen",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 1,
+        "name": "query_count",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "d0b2ef0a1668ab4029a439637c2be9c7caa57748faed4789ca95424bbd7c6ba5"
+}

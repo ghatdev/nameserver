@@ -1,0 +1,14 @@
+[server]
+listen = ["127.0.0.1:5353"]
+allow_networks = ["127.0.0.0/8", "::1/128"]
+
+[resolver]
+mode = "recursive"
+root_hints = "../resources/root.hints"
+dnssec_validation = true
+
+[management]
+node_name = "local"
+
+[management.nats]
+url = "nats://127.0.0.1:24222"

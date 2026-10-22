@@ -1,0 +1,46 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT di.ip, i.geo_country, i.asn_org, i.domain_count, i.is_cdn\n         FROM domain_ips di LEFT JOIN ips i ON di.ip = i.ip\n         WHERE di.domain = $1\n         ORDER BY di.last_seen DESC LIMIT 50",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ip",
+        "type_info": "Inet"
+      },
+      {
+        "ordinal": 1,
+        "name": "geo_country",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "asn_org",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "domain_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "is_cdn",
+        "type_info": "Bool"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "6f9c6cf6139f0812ac4202b3776c1865d0c8bf680c797776e6bf91f3b30f361f"
+}

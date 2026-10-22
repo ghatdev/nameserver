@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO domain_ips (domain, ip, first_seen, last_seen)\n               VALUES ($1, $2, $3, $3)\n               ON CONFLICT(domain, ip) DO UPDATE SET\n                 last_seen = GREATEST(domain_ips.last_seen, $3)\n               RETURNING (xmax = 0) AS \"inserted!\"",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "inserted!",
+        "type_info": "Bool"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Inet",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "e82b85da8cd78ed4b5121467a017006701af9c96017a2900c0e788bb8360cdd7"
+}

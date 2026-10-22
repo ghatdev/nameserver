@@ -28,9 +28,9 @@ jobs:
           target=$(rustc -vV | sed -n 's/^host: //p')
           package="nameserver-${GITHUB_REF_NAME}-${target}"
           mkdir -p "dist/${package}/bin"
-          cp target/release/nameserver-resolver target/release/nameserver-authority "dist/${package}/bin/"
-          cp -R examples resources docs "dist/${package}/"
-          cp README.md LICENSE "dist/${package}/"
+          cp target/release/nameserver-resolver target/release/nameserver-authority target/release/nameserver-control target/release/nameserver "dist/${package}/bin/"
+          cp -R examples resources docs atlas tools "dist/${package}/"
+          cp README.md LICENSE atlas.hcl "dist/${package}/"
           tar -C dist -czf "dist/${package}.tar.gz" "$package"
       - uses: actions/upload-artifact@v7.0.2
         with:

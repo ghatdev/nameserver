@@ -1,0 +1,27 @@
+origin = "example.test"
+nameservers = ["ns1.example.test."]
+
+[[records]]
+name = "@"
+type = "A"
+value = "192.0.2.10"
+ttl = 300
+
+[[records]]
+name = "ns1"
+type = "A"
+value = "192.0.2.53"
+ttl = 300
+
+[[records]]
+name = "www"
+type = "CNAME"
+value = "example.test."
+ttl = 300
+
+[dnssec]
+enabled = true
+algorithm = "ECDSAP256SHA256"
+nsec_mode = "nsec3"
+nsec3_iterations = 0
+nsec3_salt = ""

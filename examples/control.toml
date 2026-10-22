@@ -1,0 +1,27 @@
+postgres_url = "postgres://nameserver@127.0.0.1:25432/nameserver?sslmode=disable"
+auto_pull = false
+auto_rdap = false
+
+[api]
+listen = "127.0.0.1:8080"
+
+[nats]
+url = "nats://127.0.0.1:24222"
+stream_replicas = 1
+
+[clickhouse]
+url = "http://127.0.0.1:28123"
+database = "nameserver"
+
+[dns]
+server = "dns.example.test"
+
+[ml]
+enabled = false
+model_path = "../config/models/model.onnx"
+
+[injector]
+enabled = false
+
+[benign_sampler]
+enabled = false

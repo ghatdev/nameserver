@@ -1,0 +1,55 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT f.id, f.slug,\n                f.output_format as \"output_format: OutputFormat\",\n                s.last_checksum, s.last_entry_count\n         FROM filters f\n         JOIN sources s ON f.source_id = s.id\n         ORDER BY f.slug",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "slug",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "output_format: OutputFormat",
+        "type_info": {
+          "Custom": {
+            "name": "output_format",
+            "kind": {
+              "Enum": [
+                "xor",
+                "fst",
+                "ipf"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "last_checksum",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "last_entry_count",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "d55c168b2a0a6aee1a8404802e6a492f0a9298040c5ce966517c493c623f010f"
+}

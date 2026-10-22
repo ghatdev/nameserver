@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT s.slug FROM indicator_domains d JOIN enrichment_bindings eb ON d.source = eb.source_id JOIN sources s ON s.id = d.source WHERE eb.enrichment_type = 'nrd' AND d.domain = $1 LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "slug",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "1c7143a6b8a79867687ecd41858a3a3fa2e4cc492013bf3b3bd8262c9be4d442"
+}

@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT ns_trust, is_nrd, nrd_source as \"nrd_source?\"\n         FROM domain_reputation WHERE registrable_domain = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ns_trust",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "is_nrd",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 2,
+        "name": "nrd_source?",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "4dc23e58ac3906792f278528627e0850eedb03fec8ea7c635e3891f44dd5ccf9"
+}

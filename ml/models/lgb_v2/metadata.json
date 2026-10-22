@@ -1,0 +1,208 @@
+{
+  "version": "20260409_071122",
+  "created_at": "2026-04-09T07:11:22.523388+00:00",
+  "feature_names": [
+    "reg_entropy",
+    "reg_length",
+    "reg_hyphen_count",
+    "reg_digit_count",
+    "reg_cv_ratio",
+    "reg_ngram_score",
+    "reg_is_punycode",
+    "reg_confusable_count",
+    "sub_entropy",
+    "tld_category",
+    "avg_auth_ttl",
+    "has_cname",
+    "a_record_count",
+    "ns_name_entropy",
+    "ns_name_length",
+    "fqdn_seen_days",
+    "fqdn_query_count",
+    "cname_target_entropy",
+    "reg_emb_0",
+    "reg_emb_1",
+    "reg_emb_2",
+    "reg_emb_3",
+    "reg_emb_4",
+    "reg_emb_5",
+    "reg_emb_6",
+    "reg_emb_7",
+    "reg_emb_8",
+    "reg_emb_9",
+    "reg_emb_10",
+    "reg_emb_11",
+    "reg_emb_12",
+    "reg_emb_13",
+    "reg_emb_14",
+    "reg_emb_15",
+    "reg_emb_16",
+    "reg_emb_17",
+    "reg_emb_18",
+    "reg_emb_19",
+    "reg_emb_20",
+    "reg_emb_21",
+    "reg_emb_22",
+    "reg_emb_23",
+    "reg_emb_24",
+    "reg_emb_25",
+    "reg_emb_26",
+    "reg_emb_27",
+    "reg_emb_28",
+    "reg_emb_29",
+    "reg_emb_30",
+    "reg_emb_31",
+    "sub_emb_0",
+    "sub_emb_1",
+    "sub_emb_2",
+    "sub_emb_3",
+    "sub_emb_4",
+    "sub_emb_5",
+    "sub_emb_6",
+    "sub_emb_7",
+    "sub_emb_8",
+    "sub_emb_9",
+    "sub_emb_10",
+    "sub_emb_11",
+    "sub_emb_12",
+    "sub_emb_13",
+    "sub_emb_14",
+    "sub_emb_15",
+    "sub_emb_16",
+    "sub_emb_17",
+    "sub_emb_18",
+    "sub_emb_19",
+    "sub_emb_20",
+    "sub_emb_21",
+    "sub_emb_22",
+    "sub_emb_23",
+    "sub_emb_24",
+    "sub_emb_25",
+    "sub_emb_26",
+    "sub_emb_27",
+    "sub_emb_28",
+    "sub_emb_29",
+    "sub_emb_30",
+    "sub_emb_31",
+    "ns_observation_count",
+    "well_known_rank_norm",
+    "is_nrd",
+    "nrd_age_days"
+  ],
+  "categorical_features": [],
+  "ordinal_encode_features": [
+    "tld_category"
+  ],
+  "ordinal_maps": {
+    "tld_category": {
+      "cctld": 0,
+      "free": 1,
+      "gtld": 2,
+      "newgtld": 3
+    }
+  },
+  "n_features": 86,
+  "thresholds": {
+    "malicious": 0.9,
+    "suspicious": 0.5,
+    "safe": 0.1
+  },
+  "evaluation": {
+    "auc": 0.9657254647434045,
+    "threshold_malicious": 0.9,
+    "confusion_matrix": {
+      "tn": 18340,
+      "fp": 33,
+      "fn": 2683,
+      "tp": 11985
+    },
+    "val_samples": 33041,
+    "val_malicious": 14668,
+    "val_benign": 18373
+  },
+  "shap": {
+    "top_features": [
+      {
+        "feature": "sub_emb_15",
+        "mean_abs_shap": 1.44722565739635
+      },
+      {
+        "feature": "sub_entropy",
+        "mean_abs_shap": 0.6618207020921731
+      },
+      {
+        "feature": "ns_observation_count",
+        "mean_abs_shap": 0.48008530981526176
+      },
+      {
+        "feature": "sub_emb_8",
+        "mean_abs_shap": 0.3364251592979245
+      },
+      {
+        "feature": "avg_auth_ttl",
+        "mean_abs_shap": 0.3123069905858724
+      },
+      {
+        "feature": "sub_emb_3",
+        "mean_abs_shap": 0.26598939654844106
+      },
+      {
+        "feature": "well_known_rank_norm",
+        "mean_abs_shap": 0.26101633847282196
+      },
+      {
+        "feature": "sub_emb_31",
+        "mean_abs_shap": 0.24298653852842905
+      },
+      {
+        "feature": "sub_emb_24",
+        "mean_abs_shap": 0.21248572596473284
+      },
+      {
+        "feature": "tld_category",
+        "mean_abs_shap": 0.19067521918302222
+      },
+      {
+        "feature": "sub_emb_18",
+        "mean_abs_shap": 0.1260456770053454
+      },
+      {
+        "feature": "a_record_count",
+        "mean_abs_shap": 0.1257265057832338
+      },
+      {
+        "feature": "reg_emb_22",
+        "mean_abs_shap": 0.10124697978811592
+      },
+      {
+        "feature": "sub_emb_12",
+        "mean_abs_shap": 0.09909006330862397
+      },
+      {
+        "feature": "ns_name_entropy",
+        "mean_abs_shap": 0.09052668823873286
+      },
+      {
+        "feature": "reg_emb_9",
+        "mean_abs_shap": 0.08886971391385629
+      },
+      {
+        "feature": "ns_name_length",
+        "mean_abs_shap": 0.08818053883470295
+      },
+      {
+        "feature": "reg_emb_25",
+        "mean_abs_shap": 0.08235180385282541
+      },
+      {
+        "feature": "sub_emb_5",
+        "mean_abs_shap": 0.07853856796038058
+      },
+      {
+        "feature": "reg_emb_15",
+        "mean_abs_shap": 0.07643293689989339
+      }
+    ]
+  },
+  "training_time_seconds": 9.062006041989662
+}

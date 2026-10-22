@@ -12,14 +12,24 @@ use hickory_server::{
 };
 use tokio::sync::Semaphore;
 
-use crate::{Filter, ServerSettings};
+use crate::{Filter, Processor, ServerSettings};
 
 pub struct Snapshot {
-    pub catalog: Catalog,
+    pub background: Vec<tokio::task::AbortHandle>,
+    pub catalog: Arc<ArcSwap<Catalog>>,
+    pub processor: Option<Arc<dyn Processor>>,
     /// Kept separate so unchecked data cannot enter the validating resolver's cache.
     pub unchecked_catalog: Option<Catalog>,
     pub filter: Filter,
     pub recursive: bool,
+}
+
+impl Drop for Snapshot {
+    fn drop(&mut self) {
+        for task in &self.background {
+            task.abort();
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -27,6 +37,7 @@ pub struct Handler {
     pub snapshot: Arc<ArcSwap<Snapshot>>,
     settings: ServerSettings,
     semaphore: Arc<Semaphore>,
+    profile: Option<String>,
 }
 
 impl Handler {
@@ -35,6 +46,20 @@ impl Handler {
             snapshot: Arc::new(ArcSwap::from_pointee(snapshot)),
             semaphore: Arc::new(Semaphore::new(settings.max_in_flight)),
             settings,
+            profile: None,
+        }
+    }
+    pub fn with_profile(&self, profile: String) -> Self {
+        let mut handler = self.clone();
+        handler.profile = Some(profile);
+        handler
+    }
+
+    pub async fn profile_exists(&self, profile: &str) -> bool {
+        let snapshot = self.snapshot.load_full();
+        match &snapshot.processor {
+            Some(processor) => processor.profile_exists(profile).await,
+            None => false,
         }
     }
 }
@@ -47,13 +72,14 @@ impl RequestHandler for Handler {
         response_handle: R,
     ) -> ResponseInfo {
         let snapshot = self.snapshot.load_full();
+        let current = snapshot.catalog.load_full();
         let catalog = if request.metadata.checking_disabled {
             snapshot
                 .unchecked_catalog
                 .as_ref()
-                .unwrap_or(&snapshot.catalog)
+                .unwrap_or(current.as_ref())
         } else {
-            &snapshot.catalog
+            current.as_ref()
         };
         if !self.settings.permits(request.src().ip()) {
             return respond(
@@ -85,6 +111,16 @@ impl RequestHandler for Handler {
                 .await;
             }
         };
+        if info.query.query_class() != hickory_server::proto::rr::DNSClass::IN {
+            return respond(
+                request,
+                response_handle,
+                ResponseCode::Refused,
+                snapshot.recursive,
+                false,
+            )
+            .await;
+        }
         // Let Hickory negotiate unsupported EDNS versions before applying local policy.
         if request.edns.as_ref().is_none_or(|edns| edns.version() == 0)
             && snapshot.filter.is_blocked(&Name::from(info.query.name()))
@@ -108,6 +144,33 @@ impl RequestHandler for Handler {
             )
             .await;
         };
+        if let Some(processor) = &snapshot.processor
+            && request.metadata.recursion_desired
+            && !matches!(
+                info.query.query_type(),
+                hickory_server::proto::rr::RecordType::AXFR
+                    | hickory_server::proto::rr::RecordType::IXFR
+            )
+        {
+            let result = tokio::time::timeout(
+                Duration::from_secs(self.settings.query_timeout_secs),
+                processor.process(snapshot.clone(), request, self.profile.as_deref()),
+            )
+            .await;
+            return match result {
+                Ok(Ok(wire)) => send_wire(request, response_handle, &wire).await,
+                _ => {
+                    respond(
+                        request,
+                        response_handle,
+                        ResponseCode::ServFail,
+                        snapshot.recursive,
+                        false,
+                    )
+                    .await
+                }
+            };
+        }
         let fallback = response_handle.clone();
         match tokio::time::timeout(
             Duration::from_secs(self.settings.query_timeout_secs),
@@ -171,4 +234,31 @@ async fn respond(
                 counts: HeaderCounts::default(),
             })
         })
+}
+
+async fn send_wire(
+    request: &Request,
+    mut output: impl ResponseHandler,
+    wire: &[u8],
+) -> ResponseInfo {
+    let Ok(message) = hickory_server::proto::op::Message::from_vec(wire) else {
+        return respond(request, output, ResponseCode::ServFail, true, false).await;
+    };
+    let mut builder = MessageResponseBuilder::from_message_request(request);
+    if let Some(edns) = &message.edns {
+        builder.edns(edns);
+    }
+    let response = builder.build(
+        message.metadata,
+        message.answers.iter(),
+        message.authorities.iter(),
+        &[],
+        message.additionals.iter(),
+    );
+    output.send_response(response).await.unwrap_or_else(|_| {
+        ResponseInfo::from(Header {
+            metadata: message.metadata,
+            counts: HeaderCounts::default(),
+        })
+    })
 }

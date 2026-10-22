@@ -1,7 +1,4 @@
-use std::{
-    net::SocketAddr,
-    sync::{Arc, Mutex},
-};
+use std::{net::SocketAddr, sync::Arc};
 
 use anyhow::Result;
 use axum::{
@@ -15,15 +12,13 @@ use axum::{
 use axum_server::{Handle, tls_rustls::RustlsConfig};
 use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD};
 use hickory_server::{
-    net::{NetError, runtime::TokioTime, xfer::Protocol},
-    proto::{rr::Record, serialize::binary::BinEncoder},
-    server::{Request, RequestHandler, ResponseHandler, ResponseInfo},
-    zone_handler::MessageResponse,
+    net::{runtime::TokioTime, xfer::Protocol},
+    server::{Request, RequestHandler},
 };
 use serde::Deserialize;
 use tokio::{net::TcpListener, task::JoinHandle};
 
-use crate::{Handler, tls::CertificateResolver};
+use crate::{CapturedResponse, Handler};
 
 #[derive(Clone)]
 struct App {
@@ -33,7 +28,7 @@ struct App {
 
 pub fn start(
     listener: TcpListener,
-    certificate: Arc<CertificateResolver>,
+    certificate: Arc<dyn rustls::server::ResolvesServerCert>,
     handler: Handler,
     dns_name: Option<String>,
 ) -> Result<(Handle<SocketAddr>, JoinHandle<std::io::Result<()>>)> {
@@ -43,6 +38,7 @@ pub fn start(
     tls.alpn_protocols = vec![b"h2".to_vec(), b"http/1.1".to_vec()];
     let app = Router::new()
         .route("/dns-query", get(get_query).post(post_query))
+        .route("/{profile}", get(get_query).post(post_query))
         .layer(DefaultBodyLimit::max(65535))
         .with_state(App { handler, dns_name });
     let handle = Handle::new();
@@ -112,19 +108,24 @@ async fn process(
     if !(12..=65535).contains(&wire.len()) {
         return StatusCode::BAD_REQUEST.into_response();
     }
+    let profile = uri.path().trim_start_matches('/');
+    let handler = if profile == "dns-query" {
+        app.handler
+    } else {
+        if !app.handler.profile_exists(profile).await {
+            return StatusCode::NOT_FOUND.into_response();
+        }
+        app.handler.with_profile(profile.to_owned())
+    };
     let request = match Request::from_bytes(wire, source, Protocol::Https) {
         Ok(request) => request,
         Err(_) => return StatusCode::BAD_REQUEST.into_response(),
     };
     let response = CapturedResponse::default();
-    app.handler
+    handler
         .handle_request::<_, TokioTime>(&request, response.clone())
         .await;
-    let wire = response
-        .0
-        .lock()
-        .ok()
-        .and_then(|mut captured| captured.take());
+    let wire = response.take();
     match wire {
         Some(wire) => (
             [
@@ -135,33 +136,5 @@ async fn process(
         )
             .into_response(),
         None => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
-    }
-}
-
-#[derive(Clone, Default)]
-struct CapturedResponse(Arc<Mutex<Option<Vec<u8>>>>);
-
-#[async_trait::async_trait]
-impl ResponseHandler for CapturedResponse {
-    async fn send_response<'a>(
-        &mut self,
-        response: MessageResponse<
-            '_,
-            'a,
-            impl Iterator<Item = &'a Record> + Send + 'a,
-            impl Iterator<Item = &'a Record> + Send + 'a,
-            impl Iterator<Item = &'a Record> + Send + 'a,
-            impl Iterator<Item = &'a Record> + Send + 'a,
-        >,
-    ) -> std::result::Result<ResponseInfo, NetError> {
-        let mut wire = Vec::new();
-        let mut encoder = BinEncoder::new(&mut wire);
-        encoder.set_max_size(u16::MAX);
-        let info = response.destructive_emit(&mut encoder)?;
-        *self
-            .0
-            .lock()
-            .map_err(|_| std::io::Error::other("DNS response lock poisoned"))? = Some(wire);
-        Ok(info)
     }
 }

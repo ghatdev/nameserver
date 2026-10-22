@@ -1,0 +1,119 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, slug, indicator_type as \"indicator_type: IndicatorType\", url, categories,\n                fetch_config, parse_config, validate_config,\n                refresh_interval_secs, enabled, last_pull_at, last_checksum, last_entry_count,\n                created_at, updated_at\n         FROM sources WHERE slug = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "slug",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "indicator_type: IndicatorType",
+        "type_info": {
+          "Custom": {
+            "name": "indicator_type",
+            "kind": {
+              "Enum": [
+                "domain",
+                "ip",
+                "asn",
+                "geo",
+                "suffix"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "url",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "categories",
+        "type_info": "TextArray"
+      },
+      {
+        "ordinal": 5,
+        "name": "fetch_config",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 6,
+        "name": "parse_config",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 7,
+        "name": "validate_config",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 8,
+        "name": "refresh_interval_secs",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 9,
+        "name": "enabled",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 10,
+        "name": "last_pull_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 11,
+        "name": "last_checksum",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 12,
+        "name": "last_entry_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 13,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 14,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "59b061be5912e2e1da613df76b40b8fb42ddd8acc63c573149cb36d58d107d5b"
+}

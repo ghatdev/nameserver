@@ -1,0 +1,71 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT slug, url, indicator_type as \"indicator_type: IndicatorType\", fetch_config, parse_config, validate_config, last_checksum\n         FROM sources WHERE id = $1 AND enabled = true",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "slug",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "url",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "indicator_type: IndicatorType",
+        "type_info": {
+          "Custom": {
+            "name": "indicator_type",
+            "kind": {
+              "Enum": [
+                "domain",
+                "ip",
+                "asn",
+                "geo",
+                "suffix"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "fetch_config",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 4,
+        "name": "parse_config",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 5,
+        "name": "validate_config",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 6,
+        "name": "last_checksum",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "183f8a50edd0949827b6199b227fa31391fa5e1815474dc09782c5daca8e32b9"
+}

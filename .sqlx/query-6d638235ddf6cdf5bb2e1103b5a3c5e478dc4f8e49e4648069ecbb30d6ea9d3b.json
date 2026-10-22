@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT pf.profile_id FROM profile_filters pf JOIN filters f ON pf.filter_id = f.id WHERE f.slug = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "profile_id",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "6d638235ddf6cdf5bb2e1103b5a3c5e478dc4f8e49e4648069ecbb30d6ea9d3b"
+}

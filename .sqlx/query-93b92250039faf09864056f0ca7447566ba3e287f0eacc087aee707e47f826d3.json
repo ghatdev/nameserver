@@ -1,0 +1,76 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT registrable_domain, creation_date, expiration_date, registrar,\n                status_json, nameservers_json, privacy_protected, lookup_method,\n                fetched_at, updated_at\n         FROM rdap_cache WHERE registrable_domain = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "registrable_domain",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "creation_date",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "expiration_date",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "registrar",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "status_json",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 5,
+        "name": "nameservers_json",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 6,
+        "name": "privacy_protected",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 7,
+        "name": "lookup_method",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 8,
+        "name": "fetched_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "93b92250039faf09864056f0ca7447566ba3e287f0eacc087aee707e47f826d3"
+}

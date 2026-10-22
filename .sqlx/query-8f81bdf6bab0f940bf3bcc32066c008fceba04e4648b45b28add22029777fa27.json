@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT lookup_method, retry_count,\n                            updated_at AS \"fetched_at!\"\n                     FROM rdap_cache WHERE registrable_domain = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "lookup_method",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "retry_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "fetched_at!",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "8f81bdf6bab0f940bf3bcc32066c008fceba04e4648b45b28add22029777fa27"
+}

@@ -1,0 +1,83 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT f.id, f.slug, f.display_name,\n                f.filter_type as \"filter_type: FilterType\",\n                f.output_format as \"output_format: OutputFormat\",\n                f.compiled_entry_count, f.compiled_at, s.slug AS source_slug\n         FROM filters f\n         JOIN sources s ON f.source_id = s.id\n         ORDER BY f.slug",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "slug",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "display_name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "filter_type: FilterType",
+        "type_info": {
+          "Custom": {
+            "name": "filter_type",
+            "kind": {
+              "Enum": [
+                "block",
+                "allow"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "output_format: OutputFormat",
+        "type_info": {
+          "Custom": {
+            "name": "output_format",
+            "kind": {
+              "Enum": [
+                "xor",
+                "fst",
+                "ipf"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "compiled_entry_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "compiled_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 7,
+        "name": "source_slug",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "49ee3540d76614b7561689de3ecfdf57c07afd98ef34887eadc3d0a3a4c1cb40"
+}

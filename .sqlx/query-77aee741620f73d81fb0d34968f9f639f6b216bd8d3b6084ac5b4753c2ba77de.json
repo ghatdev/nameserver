@@ -1,0 +1,26 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO resolution_history (domain, resolved_at, ips, ttl, cname_chain, ns_servers, mx_records, dnssec_status, resolve_ms, a_record_count, has_txt, referral_hop_count, soa_json)\n         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Timestamptz",
+        "Jsonb",
+        "Int4",
+        "Jsonb",
+        "Jsonb",
+        "Jsonb",
+        "Text",
+        "Int4",
+        "Int2",
+        "Bool",
+        "Int2",
+        "Jsonb"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "77aee741620f73d81fb0d34968f9f639f6b216bd8d3b6084ac5b4753c2ba77de"
+}

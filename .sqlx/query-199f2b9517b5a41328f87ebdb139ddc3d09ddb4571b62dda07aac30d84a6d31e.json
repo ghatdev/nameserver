@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM filters WHERE source_id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "199f2b9517b5a41328f87ebdb139ddc3d09ddb4571b62dda07aac30d84a6d31e"
+}

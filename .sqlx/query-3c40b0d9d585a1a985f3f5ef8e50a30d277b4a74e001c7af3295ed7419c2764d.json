@@ -1,0 +1,42 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, display_name, block_mode as \"block_mode: BlockMode\" FROM profiles WHERE enabled = true",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "display_name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "block_mode: BlockMode",
+        "type_info": {
+          "Custom": {
+            "name": "block_mode",
+            "kind": {
+              "Enum": [
+                "nxdomain",
+                "redirect_ip"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "3c40b0d9d585a1a985f3f5ef8e50a30d277b4a74e001c7af3295ed7419c2764d"
+}

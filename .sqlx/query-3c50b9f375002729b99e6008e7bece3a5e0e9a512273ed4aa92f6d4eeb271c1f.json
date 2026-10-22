@@ -1,0 +1,160 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT dr.ns_trust, dr.cname_targets, dr.tld, dr.tld_type, dr.is_well_known, dr.is_nrd, dr.nrd_source, dr.is_trusted, dr.trust_source, dr.total_flow_count, dr.ns_observation_count, dr.avg_auth_ttl, dr.min_auth_ttl, dr.avg_resolve_ms, dr.avg_chain_depth, dr.has_dnssec, dr.has_cname, dr.has_mx, dr.is_cdn, dr.unique_ip_count, dr.a_record_count, dr.primary_asn, dr.primary_country, COALESCE( (SELECT jsonb_agg(m.ns_domain ORDER BY m.ns_domain) FROM domain_ns_map m WHERE m.registrable_domain = dr.registrable_domain), '[]'::jsonb ) AS \"ns_domains!\" FROM domain_reputation dr WHERE dr.registrable_domain = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ns_trust",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "cname_targets",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 2,
+        "name": "tld",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "tld_type",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "is_well_known",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 5,
+        "name": "is_nrd",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 6,
+        "name": "nrd_source",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "is_trusted",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 8,
+        "name": "trust_source",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 9,
+        "name": "total_flow_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 10,
+        "name": "ns_observation_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 11,
+        "name": "avg_auth_ttl",
+        "type_info": "Float4"
+      },
+      {
+        "ordinal": 12,
+        "name": "min_auth_ttl",
+        "type_info": "Float4"
+      },
+      {
+        "ordinal": 13,
+        "name": "avg_resolve_ms",
+        "type_info": "Float4"
+      },
+      {
+        "ordinal": 14,
+        "name": "avg_chain_depth",
+        "type_info": "Float4"
+      },
+      {
+        "ordinal": 15,
+        "name": "has_dnssec",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 16,
+        "name": "has_cname",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 17,
+        "name": "has_mx",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 18,
+        "name": "is_cdn",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 19,
+        "name": "unique_ip_count",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 20,
+        "name": "a_record_count",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 21,
+        "name": "primary_asn",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 22,
+        "name": "primary_country",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 23,
+        "name": "ns_domains!",
+        "type_info": "Jsonb"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      null
+    ]
+  },
+  "hash": "3c50b9f375002729b99e6008e7bece3a5e0e9a512273ed4aa92f6d4eeb271c1f"
+}

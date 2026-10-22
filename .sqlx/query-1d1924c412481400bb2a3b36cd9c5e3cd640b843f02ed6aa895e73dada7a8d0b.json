@@ -1,0 +1,97 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT f.id, f.slug, f.display_name,\n                f.filter_type as \"filter_type: FilterType\",\n                f.output_format as \"output_format: OutputFormat\",\n                f.source_id, f.compiled_checksum, f.compiled_entry_count, f.compiled_at,\n                s.slug AS source_slug\n         FROM filters f\n         JOIN sources s ON f.source_id = s.id\n         WHERE f.slug = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "slug",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "display_name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "filter_type: FilterType",
+        "type_info": {
+          "Custom": {
+            "name": "filter_type",
+            "kind": {
+              "Enum": [
+                "block",
+                "allow"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "output_format: OutputFormat",
+        "type_info": {
+          "Custom": {
+            "name": "output_format",
+            "kind": {
+              "Enum": [
+                "xor",
+                "fst",
+                "ipf"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "source_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 6,
+        "name": "compiled_checksum",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "compiled_entry_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 8,
+        "name": "compiled_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "source_slug",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "1d1924c412481400bb2a3b36cd9c5e3cd640b843f02ed6aa895e73dada7a8d0b"
+}

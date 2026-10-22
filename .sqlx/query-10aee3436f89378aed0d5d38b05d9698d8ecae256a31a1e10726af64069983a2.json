@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO domain_label_embeddings (label, embedding, sim_embedding, domains, ns_domains, updated_at) VALUES ($1, $2, $3, $4, $5, NOW()) ON CONFLICT (label) DO UPDATE SET embedding = EXCLUDED.embedding, sim_embedding = EXCLUDED.sim_embedding, domains = domain_label_embeddings.domains || EXCLUDED.domains, ns_domains = EXCLUDED.ns_domains, updated_at = NOW()",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        {
+          "Custom": {
+            "name": "vector",
+            "kind": "Simple"
+          }
+        },
+        {
+          "Custom": {
+            "name": "vector",
+            "kind": "Simple"
+          }
+        },
+        "Jsonb",
+        "Jsonb"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "10aee3436f89378aed0d5d38b05d9698d8ecae256a31a1e10726af64069983a2"
+}

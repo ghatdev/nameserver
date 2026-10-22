@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT domain FROM indicator_domains WHERE source = $1 ORDER BY domain",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "domain",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "2fd0a840ff7fb38a475f93fb4137c5b36bcf905b7a78fb8a5e78e46b15ab5759"
+}

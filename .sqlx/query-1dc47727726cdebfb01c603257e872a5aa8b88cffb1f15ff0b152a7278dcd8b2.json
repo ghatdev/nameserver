@@ -1,0 +1,58 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT resolved_at, ips, ttl, cname_chain, ns_servers, dnssec_status, resolve_ms\n         FROM resolution_history WHERE domain = $1\n         ORDER BY resolved_at DESC LIMIT 20",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "resolved_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 1,
+        "name": "ips",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 2,
+        "name": "ttl",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 3,
+        "name": "cname_chain",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 4,
+        "name": "ns_servers",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 5,
+        "name": "dnssec_status",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "resolve_ms",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "1dc47727726cdebfb01c603257e872a5aa8b88cffb1f15ff0b152a7278dcd8b2"
+}

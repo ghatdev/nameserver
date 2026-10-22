@@ -1,0 +1,12 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE rdap_cache SET fetched_at = '1970-01-01T00:00:00Z', retry_count = 0 WHERE lookup_method NOT IN ('rdap', 'whois')",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": []
+  },
+  "hash": "08f304bc58b19cd332d2c5d7e09254bc2d3c454f440fed7fa05a4c37a82a184f"
+}

@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT domain FROM profile_custom_entries WHERE profile_id = $1 AND list_type = 'allowlist' ORDER BY domain",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "domain",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "73a8b0a7e6f41d133b34cdd5fdbfbd1b1763490f55dfa40c7e2701802f013e96"
+}

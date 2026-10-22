@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO rdap_cache (registrable_domain, creation_date, expiration_date, registrar, status_json, nameservers_json, privacy_protected, lookup_method, retry_count, last_error, fetched_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CASE WHEN $9 THEN 0 ELSE 1 END, $10, $11, $11) ON CONFLICT(registrable_domain) DO UPDATE SET creation_date = COALESCE(excluded.creation_date, rdap_cache.creation_date), expiration_date = COALESCE(excluded.expiration_date, rdap_cache.expiration_date), registrar = COALESCE(excluded.registrar, rdap_cache.registrar), status_json = excluded.status_json, nameservers_json = excluded.nameservers_json, privacy_protected = excluded.privacy_protected, lookup_method = excluded.lookup_method, retry_count = CASE WHEN $9 THEN 0 ELSE rdap_cache.retry_count + 1 END, last_error = excluded.last_error, fetched_at = excluded.fetched_at, updated_at = excluded.updated_at",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Text",
+        "Text",
+        "Jsonb",
+        "Jsonb",
+        "Bool",
+        "Text",
+        "Bool",
+        "Text",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "55b51217bfd0fb5aa0b54001e05eecd9999c803ccb5ff07d5f5346708622589f"
+}

@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT f.slug FROM filters f JOIN sources s ON f.source_id = s.id WHERE s.slug = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "slug",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "b2fb35cb0032bfe3a852ee81c03f450706e2d49e1684b802811870ad9f5a8409"
+}

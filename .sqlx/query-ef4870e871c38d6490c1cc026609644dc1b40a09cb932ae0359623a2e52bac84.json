@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO domain_ns_map (registrable_domain, ns_domain, first_seen, last_seen, observation_count) VALUES ($1, $2, $3, $4, 100) ON CONFLICT DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ef4870e871c38d6490c1cc026609644dc1b40a09cb932ae0359623a2e52bac84"
+}

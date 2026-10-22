@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM profile_filters WHERE profile_id = $1 AND filter_id = (SELECT id FROM filters WHERE slug = $2)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "1bf38e91ccada049163b5606aeab61b573782b3a029e01dd0a2a0f3ae722395e"
+}

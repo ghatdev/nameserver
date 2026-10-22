@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT observation_count, first_seen FROM domain_ns_map WHERE registrable_domain = $1 AND ns_domain = $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "observation_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "first_seen",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "ff823d92f5a03343f456bc2d15371bc3ba9d125c3cc9fdbd62934857dbedacf0"
+}

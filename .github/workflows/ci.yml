@@ -24,6 +24,7 @@ jobs:
       - run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - run: cargo test --workspace --all-targets --locked
       - run: cargo build --workspace --locked
+      - run: python3 tests/migrations.py
       - run: python3 tests/integration.py
 
   msrv:
@@ -33,3 +34,45 @@ jobs:
       - uses: dtolnay/rust-toolchain@1.88.0
       - uses: Swatinem/rust-cache@v2
       - run: cargo check --workspace --all-targets --locked
+
+  management:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: ariga/setup-atlas@v0
+      - run: docker compose up -d --wait
+      - run: atlas migrate apply --dir file://atlas/migrations/postgres --url 'postgres://postgres@127.0.0.1:25432/nameserver?sslmode=disable'
+      - run: python3 tools/migrate_clickhouse.py apply --url http://127.0.0.1:28123
+      - run: cargo build --workspace --locked
+      - run: python3 tests/management.py
+      - if: always()
+        run: docker compose logs --tail=60
+      - if: always()
+        run: docker compose down -v
+
+  optional-ml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo clippy -p nameserver-control --features ml --all-targets --locked -- -D warnings
+      - run: python3 -m venv /tmp/nameserver-onnx
+      - run: /tmp/nameserver-onnx/bin/pip install 'onnxruntime>=1.24,<1.25'
+      - run: python3 tools/bundle_models.py
+      - name: Configure ONNX runtime and model bundle
+        shell: bash
+        run: |
+          /tmp/nameserver-onnx/bin/python - <<'PYCODE'
+          import onnxruntime, os
+          from pathlib import Path
+          library = next((Path(onnxruntime.__file__).parent / "capi").glob("libonnxruntime.so*"))
+          with open(os.environ["GITHUB_ENV"], "a") as output:
+              output.write(f"ORT_DYLIB_PATH={library}\n")
+              output.write(f"NAMESERVER_MODEL_BUNDLE={Path('config/models').resolve()}\n")
+          PYCODE
+      - run: cargo test -p nameserver-control --features ml --locked bundled_models_execute -- --ignored --nocapture

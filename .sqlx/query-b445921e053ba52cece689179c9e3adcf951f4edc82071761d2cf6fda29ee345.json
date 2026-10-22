@@ -1,0 +1,20 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT d.domain FROM indicator_domains d JOIN enrichment_bindings eb ON eb.source_id = d.source WHERE eb.enrichment_type = 'well_known' ORDER BY d.domain",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "domain",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "b445921e053ba52cece689179c9e3adcf951f4edc82071761d2cf6fda29ee345"
+}

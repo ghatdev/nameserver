@@ -1,0 +1,100 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT ip, first_seen, last_seen,\n                geo_country, geo_city,\n                asn_number, asn_org, is_cdn, is_bulletproof,\n                ptr_record, ptr_matches, domain_count, malicious_count,\n                blocklist_json\n         FROM ips WHERE ip = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ip",
+        "type_info": "Inet"
+      },
+      {
+        "ordinal": 1,
+        "name": "first_seen",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 2,
+        "name": "last_seen",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 3,
+        "name": "geo_country",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "geo_city",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "asn_number",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "asn_org",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "is_cdn",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 8,
+        "name": "is_bulletproof",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 9,
+        "name": "ptr_record",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 10,
+        "name": "ptr_matches",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 11,
+        "name": "domain_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 12,
+        "name": "malicious_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 13,
+        "name": "blocklist_json",
+        "type_info": "Jsonb"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Inet"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "76c4e61a3bde56a97da663ec5a0a4af6a9479a8fc09eaf171962e6dedd725665"
+}

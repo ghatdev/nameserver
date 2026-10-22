@@ -1,0 +1,32 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT rir, ip_version, COUNT(*) as \"cnt!\" FROM geo_entries\n         GROUP BY rir, ip_version ORDER BY rir, ip_version",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "rir",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "ip_version",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 2,
+        "name": "cnt!",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "2d9fa279d174a805406c31fdb3145349076339d920a0120b12877c1e67d10f0c"
+}

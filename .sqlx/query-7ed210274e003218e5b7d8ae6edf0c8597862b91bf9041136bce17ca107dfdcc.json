@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT ip AS \"ip!\" FROM indicator_ips d\n               JOIN sources s ON d.source = s.id\n               WHERE s.slug = $1 ORDER BY d.ip",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ip!",
+        "type_info": "Inet"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "7ed210274e003218e5b7d8ae6edf0c8597862b91bf9041136bce17ca107dfdcc"
+}

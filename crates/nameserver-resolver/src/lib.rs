@@ -1,3 +1,18 @@
+pub mod acme;
+pub mod config;
+pub mod dnssec;
+pub mod filter_set;
+pub mod geo;
+mod managed;
+pub mod nats;
+pub mod pipeline;
+pub mod profiles;
+mod recursive;
+pub mod recursor;
+pub mod suffix;
+pub mod tls;
+mod trace;
+
 use std::{
     net::SocketAddr,
     path::{Path, PathBuf},
@@ -6,16 +21,12 @@ use std::{
 
 use anyhow::{Context, Result, anyhow, ensure};
 use hickory_server::{
-    net::runtime::TokioRuntimeProvider,
     proto::rr::Name,
     resolver::{
         config::{NameServerConfig, ResolverOpts},
         recursor::{DnssecPolicyConfig, RecursiveConfig, RecursorOptions},
     },
-    store::{
-        forwarder::{ForwardConfig, ForwardZoneHandler},
-        recursor::RecursiveZoneHandler,
-    },
+    store::forwarder::{ForwardConfig, ForwardZoneHandler},
     zone_handler::{Catalog, ZoneHandler, ZoneType},
 };
 use nameserver_core::{
@@ -31,6 +42,7 @@ struct Config {
     resolver: ResolverSettings,
     #[serde(default)]
     filters: FilterSettings,
+    management: Option<managed::Settings>,
 }
 
 #[derive(Clone, Copy, Default, Deserialize)]
@@ -92,12 +104,28 @@ pub async fn build(path: PathBuf) -> Result<Prepared> {
     } else {
         None
     };
+    let filter = Filter::load(&config.filters, &path)?;
+    let managed = match config.management {
+        Some(settings) => Some(managed::connect(settings, &path).await?),
+        None => None,
+    };
+    let (processor, certificate, background) = match managed {
+        Some(connection) => (
+            Some(connection.processor),
+            connection.certificate,
+            connection.background,
+        ),
+        None => (None, None, vec![]),
+    };
     Ok(Prepared {
         server: config.server,
+        certificate,
         snapshot: Snapshot {
-            catalog,
+            catalog: Arc::new(arc_swap::ArcSwap::from_pointee(catalog)),
+            processor,
+            background,
             unchecked_catalog,
-            filter: Filter::load(&config.filters, &path)?,
+            filter,
             recursive: true,
         },
         refresh_after: None,
@@ -147,12 +175,12 @@ async fn build_catalog(options: &ResolverSettings, path: &Path, validate: bool) 
                 },
             };
             Arc::new(
-                RecursiveZoneHandler::try_from_config(
+                recursive::TracedRecursor::from_config(
                     Name::root(),
                     ZoneType::External,
                     config,
                     None,
-                    TokioRuntimeProvider::default(),
+                    trace::Provider::default(),
                 )
                 .await
                 .map_err(|error| anyhow!(error))?,

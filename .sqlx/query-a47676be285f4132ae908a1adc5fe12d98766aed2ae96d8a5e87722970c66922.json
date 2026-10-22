@@ -1,0 +1,190 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT dr.registrable_domain, dr.total_flow_count, dr.first_seen, dr.last_seen,\n                dr.tld, dr.tld_type, dr.ns_trust, dr.ns_observation_count,\n                dr.avg_auth_ttl, dr.min_auth_ttl, dr.avg_resolve_ms, dr.avg_chain_depth,\n                dr.has_cname, dr.cname_targets,\n                dr.has_dnssec, dr.has_mx, dr.unique_ip_count, dr.a_record_count,\n                dr.primary_asn, dr.primary_country, dr.is_cdn,\n                dr.is_nrd, dr.nrd_source, dr.is_well_known,\n                dr.is_trusted, dr.trusted_at, dr.trust_source,\n                dr.updated_at,\n                COALESCE(\n                    (SELECT jsonb_agg(m.ns_domain ORDER BY m.ns_domain)\n                     FROM domain_ns_map m\n                     WHERE m.registrable_domain = dr.registrable_domain),\n                    '[]'::jsonb\n                ) AS \"ns_domains!\"\n         FROM domain_reputation dr\n         WHERE dr.registrable_domain = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "registrable_domain",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "total_flow_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "first_seen",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 3,
+        "name": "last_seen",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 4,
+        "name": "tld",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "tld_type",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "ns_trust",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "ns_observation_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 8,
+        "name": "avg_auth_ttl",
+        "type_info": "Float4"
+      },
+      {
+        "ordinal": 9,
+        "name": "min_auth_ttl",
+        "type_info": "Float4"
+      },
+      {
+        "ordinal": 10,
+        "name": "avg_resolve_ms",
+        "type_info": "Float4"
+      },
+      {
+        "ordinal": 11,
+        "name": "avg_chain_depth",
+        "type_info": "Float4"
+      },
+      {
+        "ordinal": 12,
+        "name": "has_cname",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 13,
+        "name": "cname_targets",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 14,
+        "name": "has_dnssec",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 15,
+        "name": "has_mx",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 16,
+        "name": "unique_ip_count",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 17,
+        "name": "a_record_count",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 18,
+        "name": "primary_asn",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 19,
+        "name": "primary_country",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 20,
+        "name": "is_cdn",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 21,
+        "name": "is_nrd",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 22,
+        "name": "nrd_source",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 23,
+        "name": "is_well_known",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 24,
+        "name": "is_trusted",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 25,
+        "name": "trusted_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 26,
+        "name": "trust_source",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 27,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 28,
+        "name": "ns_domains!",
+        "type_info": "Jsonb"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      null
+    ]
+  },
+  "hash": "a47676be285f4132ae908a1adc5fe12d98766aed2ae96d8a5e87722970c66922"
+}

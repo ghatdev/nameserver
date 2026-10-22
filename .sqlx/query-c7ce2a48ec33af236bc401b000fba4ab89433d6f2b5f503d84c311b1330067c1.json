@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO profiles (id, display_name, block_mode, redirect_ip, is_default, enabled, created_at, updated_at)\n         VALUES ($1, $2, $3, $4, false, true, $5, $5)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        {
+          "Custom": {
+            "name": "block_mode",
+            "kind": {
+              "Enum": [
+                "nxdomain",
+                "redirect_ip"
+              ]
+            }
+          }
+        },
+        "Inet",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "c7ce2a48ec33af236bc401b000fba4ab89433d6f2b5f503d84c311b1330067c1"
+}

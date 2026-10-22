@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE profiles SET\n            display_name = COALESCE($2, display_name),\n            block_mode = COALESCE($3, block_mode),\n            redirect_ip = COALESCE($4, redirect_ip),\n            enabled = COALESCE($5, enabled),\n            updated_at = $1\n         WHERE id = $6",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Text",
+        {
+          "Custom": {
+            "name": "block_mode",
+            "kind": {
+              "Enum": [
+                "nxdomain",
+                "redirect_ip"
+              ]
+            }
+          }
+        },
+        "Inet",
+        "Bool",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "f8ea9dbe02ee80f1aafae618ed18ef2aa23850ef6d982452c7d6335321bbbf03"
+}

@@ -1,0 +1,12 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE domain_reputation SET is_nrd = FALSE, nrd_source = NULL WHERE is_nrd = TRUE AND NOT EXISTS ( SELECT 1 FROM indicator_domains d JOIN enrichment_bindings eb ON eb.source_id = d.source WHERE eb.enrichment_type = 'nrd' AND d.domain = domain_reputation.registrable_domain )",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": []
+  },
+  "hash": "461f9620f51d761edac11c7abbc4e8a99684fba89119d97feda007cad5110cdf"
+}

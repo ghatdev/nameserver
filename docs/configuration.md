@@ -4,7 +4,7 @@ Pass a TOML file with `--config`. All data and key paths are resolved relative t
 
 ## Server settings
 
-Both binaries accept the same `[server]` table.
+Both DNS binaries accept the same `[server]` table.
 
 | Setting | Default | Meaning |
 | --- | --- | --- |
@@ -14,7 +14,7 @@ Both binaries accept the same `[server]` table.
 | `allow_networks` | `127.0.0.0/8`, `::1/128` | Explicit CIDRs of permitted clients; all others are refused |
 | `max_in_flight` | `256` | Maximum concurrent resolutions |
 | `query_timeout_secs` | `30` | Deadline for each resolution |
-| `tcp_idle_timeout_secs` | `10` | Classic TCP idle and DoT handshake timeout |
+| `tcp_idle_timeout_secs` | `10` | Classic TCP and DoT idle timeout (DoT handshake limit is 10 seconds) |
 
 Listener arrays can be empty, provided another transport is configured. TCP, DoT, and DoH addresses must be distinct. A denied client receives DNS `REFUSED`, including on encrypted transports. The application evaluates the actual peer address; it does not trust proxy forwarding headers. Put a resolver behind a VPN or configure your device networks directly.
 
@@ -41,7 +41,7 @@ upstreams = ["9.9.9.9:53", "1.1.1.1:53"]
 dnssec_validation = true
 ```
 
-Use a publicly trusted certificate for personal-device deployments. Certificate issuance and renewal are handled by your ACME client. Send `SIGHUP` after replacing the PEM files; new TLS connections use the replacement certificate. Invalid or mismatched replacements are rejected. Existing connections retain their established TLS session.
+Use a publicly trusted certificate for personal-device deployments. Standalone issuance and renewal can use your ACME client; managed ACME is described in [managed setup](management.md). Send `SIGHUP` after replacing the PEM files; new TLS connections use the replacement certificate. Invalid or mismatched replacements are rejected. Existing connections retain their established TLS session.
 
 DoH accepts unpadded base64url DNS messages in the `dns` query parameter for GET. POST requests use `Content-Type: application/dns-message` and a DNS wire-format body. Malformed messages return HTTP 400, unsupported POST media types return 415, and oversized POST bodies return 413. Responses use `application/dns-message` and `Cache-Control: no-store`; the resolver's own DNS cache remains enabled.
 

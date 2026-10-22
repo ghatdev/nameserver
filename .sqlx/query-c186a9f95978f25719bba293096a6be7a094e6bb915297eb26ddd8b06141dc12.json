@@ -1,0 +1,33 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT enrichment_type as \"enrichment_type: EnrichmentType\" FROM enrichment_bindings WHERE source_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "enrichment_type: EnrichmentType",
+        "type_info": {
+          "Custom": {
+            "name": "enrichment_type",
+            "kind": {
+              "Enum": [
+                "nrd",
+                "well_known",
+                "bulletproof"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "c186a9f95978f25719bba293096a6be7a094e6bb915297eb26ddd8b06141dc12"
+}

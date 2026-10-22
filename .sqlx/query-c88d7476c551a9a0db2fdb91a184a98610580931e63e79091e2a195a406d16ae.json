@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT di.domain FROM domain_ips di WHERE di.ip = $1 ORDER BY di.last_seen DESC LIMIT 50",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "domain",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Inet"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "c88d7476c551a9a0db2fdb91a184a98610580931e63e79091e2a195a406d16ae"
+}

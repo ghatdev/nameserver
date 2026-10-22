@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT observation_count FROM domain_ns_map WHERE registrable_domain = $1 AND ns_domain = $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "observation_count",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "8eabb4013b2894abfe4a2d195669bc86ae91e87a8f9cca3f0c1d02a7bdd9dabf"
+}

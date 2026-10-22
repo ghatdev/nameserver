@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO indicator_domains (source, domain, added_at, extra) VALUES ($1, $2, $3, $4) ON CONFLICT (source, domain) DO UPDATE SET extra = EXCLUDED.extra",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Timestamptz",
+        "Jsonb"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b6731caf2d78e9161492c0683b071f95e8226cc631d48da4f0d2d342bf152c74"
+}

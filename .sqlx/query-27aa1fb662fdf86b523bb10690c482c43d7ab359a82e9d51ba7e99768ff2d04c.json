@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM enrichment_bindings WHERE source_id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "27aa1fb662fdf86b523bb10690c482c43d7ab359a82e9d51ba7e99768ff2d04c"
+}

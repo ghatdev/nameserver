@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT country, asn, asn_desc FROM geo_entries\n         WHERE ip_version = 4\n           AND start_ip <= $1 AND end_ip >= $1\n         ORDER BY start_ip DESC LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "country",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "asn",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "asn_desc",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Inet"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "d4aa6f1eb4bb964848ec7d03370a4d8982cee0e4b8b489acd5020ccec6405c0d"
+}

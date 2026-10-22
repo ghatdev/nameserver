@@ -1,0 +1,44 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT is_trusted,\n                  trusted_fingerprint as \"trusted_fingerprint: pgvector::Vector\",\n                  infra_fingerprint as \"infra_fingerprint: pgvector::Vector\"\n           FROM domain_reputation\n           WHERE registrable_domain = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "is_trusted",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 1,
+        "name": "trusted_fingerprint: pgvector::Vector",
+        "type_info": {
+          "Custom": {
+            "name": "vector",
+            "kind": "Simple"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "infra_fingerprint: pgvector::Vector",
+        "type_info": {
+          "Custom": {
+            "name": "vector",
+            "kind": "Simple"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "f0c2676154180ed318ff2c6f3fdbd218eb70776b75e1c2cff50d64caaa27af07"
+}

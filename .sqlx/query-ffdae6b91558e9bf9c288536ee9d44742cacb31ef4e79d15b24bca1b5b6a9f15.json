@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE filters SET compiled_checksum = $1, compiled_entry_count = $2, compiled_at = $3, updated_at = $3\n         WHERE id = $4",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Int4",
+        "Timestamptz",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ffdae6b91558e9bf9c288536ee9d44742cacb31ef4e79d15b24bca1b5b6a9f15"
+}

@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE sources SET\n            url = COALESCE($2, url),\n            categories = COALESCE($3, categories),\n            fetch_config = COALESCE($4, fetch_config),\n            parse_config = COALESCE($5, parse_config),\n            validate_config = COALESCE($6, validate_config),\n            refresh_interval_secs = COALESCE($7, refresh_interval_secs),\n            enabled = COALESCE($8, enabled),\n            updated_at = $1\n         WHERE slug = $9",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Timestamptz",
+        "Text",
+        "TextArray",
+        "Jsonb",
+        "Jsonb",
+        "Jsonb",
+        "Int4",
+        "Bool",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "aa34d63740a6b567f3235414332fed4dd35584bcad47964562b7e1554363d0ae"
+}

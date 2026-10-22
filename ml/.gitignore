@@ -1,0 +1,23 @@
+data/
+models/**
+__pycache__/
+*.pyc
+.venv/
+
+# Version the small inference artifacts; keep training outputs excluded.
+!models/detector_cnn_sim_v1/
+!models/detector_cnn_v1/
+!models/detector_lgb_v1_cnn/
+!models/label_cnn_maxpool/
+!models/lgb_v2/
+!models/detector_cnn_sim_v1/cnn_sim_embedding.onnx
+!models/detector_cnn_sim_v1/sim_metadata.json
+!models/detector_cnn_v1/cnn_embedding.onnx
+!models/detector_cnn_v1/cnn_metadata.json
+!models/detector_lgb_v1_cnn/detector_lgb_v1.onnx
+!models/detector_lgb_v1_cnn/detector_lgb_v1_meta.json
+!models/detector_lgb_v1_cnn/metadata.json
+!models/label_cnn_maxpool/cnn_embedding.onnx
+!models/label_cnn_maxpool/cnn_metadata.json
+!models/lgb_v2/metadata.json
+!models/lgb_v2/model.onnx

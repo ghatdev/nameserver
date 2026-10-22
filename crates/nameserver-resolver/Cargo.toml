@@ -10,10 +10,37 @@ repository.workspace = true
 [dependencies]
 anyhow.workspace = true
 clap.workspace = true
+base64.workspace = true
 hickory-server.workspace = true
 nameserver-core.workspace = true
 serde.workspace = true
 tokio.workspace = true
 
+arc-swap.workspace = true
+
+async-trait.workspace = true
+nameserver-common = { workspace = true, features = ["nats"] }
+hickory-proto.workspace = true
+async-nats.workspace = true
+rmp-serde.workspace = true
+serde_json.workspace = true
+futures.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+fst.workspace = true
+xorf.workspace = true
+bincode.workspace = true
+sha2.workspace = true
+hex.workspace = true
+rcgen.workspace = true
+rustls.workspace = true
+rustls-pemfile.workspace = true
+instant-acme.workspace = true
+reqwest.workspace = true
+tracing-subscriber.workspace = true
+
 [dev-dependencies]
 tempfile = "3"
+
+tower = { version = "0.5", features = ["util"] }
+http-body-util = "0.1"

@@ -1,0 +1,57 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT s.slug, s.indicator_type as \"indicator_type: IndicatorType\", s.last_entry_count, s.last_pull_at, s.enabled\n         FROM sources s\n         ORDER BY s.slug",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "slug",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "indicator_type: IndicatorType",
+        "type_info": {
+          "Custom": {
+            "name": "indicator_type",
+            "kind": {
+              "Enum": [
+                "domain",
+                "ip",
+                "asn",
+                "geo",
+                "suffix"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "last_entry_count",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 3,
+        "name": "last_pull_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 4,
+        "name": "enabled",
+        "type_info": "Bool"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "c5715375dcf384a9b4640566b6ef112ac659cc0e4f67cb55b87ff5c589c2c2aa"
+}
