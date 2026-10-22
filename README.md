@@ -15,7 +15,7 @@ See [architecture](docs/architecture.md) for the component boundaries and [manag
 
 ## Build
 
-Requires Rust 1.88 or newer.
+Requires Rust 1.89 or newer.
 
 ```sh
 cargo build --workspace --locked
